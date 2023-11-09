@@ -1,3 +1,5 @@
+import time
+
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QProgressBar
 
 from utils import Docker
@@ -47,14 +49,15 @@ class MainWindow(QMainWindow):
             self.progress_bar.setValue(40)
             self.progress_bar_text.setText("Docker运行中")
 
-            if not Docker.stop_cmd():
+            if not Docker.stop():
                 self.progress_bar.setValue(100)
                 self.progress_bar_text.setText('Docker停止失败')
                 return
 
             self.progress_bar_text.setText("Docker已停止")
+            time.sleep(3)
 
-            if not Docker.start_cmd():
+            if not Docker.start():
                 self.progress_bar.setValue(100)
                 self.progress_bar_text.setText('Docker启动失败')
                 return
@@ -67,7 +70,7 @@ class MainWindow(QMainWindow):
             self.progress_bar.setValue(40)
             self.progress_bar_text.setText("Docker已停止")
 
-            if not Docker.start_cmd():
+            if not Docker.start():
                 self.progress_bar.setValue(100)
                 self.progress_bar_text.setText('Docker启动失败')
                 return

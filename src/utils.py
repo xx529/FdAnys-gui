@@ -1,4 +1,5 @@
 import subprocess
+import time
 from pathlib import Path
 
 
@@ -15,21 +16,37 @@ class Cmd:
 
 class Docker:
 
-    CHECK_COUNT = 60
+    CHECK_COUNT = 120
     EXE_FILE = '/Applications/Docker.app'
     # EXE_FILE = 'C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe'
 
     @staticmethod
-    def start_cmd():
+    def start():
         is_success, _ = Cmd.run(['open', Docker.EXE_FILE])
         # is_success, _ = Cmd.run([Docker.EXE_FILE])
-        return is_success
+        if not is_success:
+            return False
+
+        for i in range(Docker.CHECK_COUNT):
+            time.sleep(1)
+            if Docker.is_running():
+                return True
+        else:
+            return False
 
     @staticmethod
-    def stop_cmd():
+    def stop():
         is_success, _ = Cmd.run(['pkill', 'Docker'])
         # is_success, _ = Cmd.run(['taskkill', '/IM', 'Docker Desktop.exe', '/F'])
-        return is_success
+        if not is_success:
+            return False
+
+        for i in range(Docker.CHECK_COUNT):
+            time.sleep(1)
+            if not Docker.is_running():
+                return True
+        else:
+            return False
 
     @staticmethod
     def is_running() -> bool:
