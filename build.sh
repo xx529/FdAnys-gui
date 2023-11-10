@@ -1,1 +1,1 @@
-pyinstaller -w ./src/main.py
+pyinstaller -F -w --cross-compile --target-arch=win main.py
